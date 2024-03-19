@@ -105,6 +105,9 @@ global.Server = function() {
                 player.ws = ws;
                 players[id] = player;
                 sim.clearNetState();
+            } else if(data[0] === 'configGame') {
+                let gameType = data[1].type;
+                sim.configGame(players[id], gameType);
             } else if(allowedCmds.includes(data[0])) {
                 sim[data[0]].apply(sim, [players[id],...data.slice(1)]);
             }
