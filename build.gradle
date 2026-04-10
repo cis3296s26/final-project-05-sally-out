@@ -464,7 +464,7 @@ task deployAll{
     dependsOn "desktop:packrMacOS"
     if(versionModifier != "steam"){
         dependsOn "server:deploy"
-        dependsOn "android:deploy"
+        // dependsOn "android:deploy"
     }
 }
 

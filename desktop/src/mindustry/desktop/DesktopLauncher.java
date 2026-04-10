@@ -37,7 +37,7 @@ public class DesktopLauncher extends ClientLauncher{
         try{
             Vars.loadLogger();
             new SdlApplication(new DesktopLauncher(arg), new SdlConfig(){{
-                title = "Mindustry";
+                title = "SALLY OUT";
                 maximized = true;
                 width = 900;
                 height = 700;
