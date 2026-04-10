@@ -40,6 +40,14 @@ cd "`dirname \"$PRG\"`/" >/dev/null
 APP_HOME="`pwd -P`"
 cd "$SAVED" >/dev/null
 
+# USE INCLUDED JDK
+JAVA_HOME="$APP_HOME/MACjdk-17.0.12.jdk/Contents/Home"
+if [ ! -x "$JAVA_HOME/bin/java" ] ; then
+    echo "ERROR: INCLUDED JDK NOT FOUND $JAVA_HOME"
+    exit 1
+fi
+
+
 APP_NAME="Gradle"
 APP_BASE_NAME=`basename "$0"`
 

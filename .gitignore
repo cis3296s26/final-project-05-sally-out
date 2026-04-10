@@ -158,6 +158,10 @@ nb-configuration.xml
 .gradle/
 gradle-app.setting
 
+/jdk-17.0.2
+/MACjdk-17.0.12.jdk
+jdk*
+*.jdk
 ## OS Specific
 .DS_Store
 Thumbs.db

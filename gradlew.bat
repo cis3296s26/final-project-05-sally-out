@@ -22,6 +22,9 @@
 @rem ##########################################################################
 
 @rem Set local scope for the variables with windows NT shell
+
+
+
 if "%OS%"=="Windows_NT" setlocal
 
 set DIRNAME=%~dp0
@@ -51,7 +54,12 @@ echo location of your Java installation.
 goto fail
 
 :findJavaFromJavaHome
-set JAVA_HOME=%JAVA_HOME:"=%
+@REM set JAVA_HOME=%JAVA_HOME:"=%
+set JAVA_HOME=%~dp0jdk-17.0.2
+if not exist "%JAVA_HOME%\bin\java.exe" (
+    echo ERROR: Bundled JDK not found!
+    exit /b 1
+)
 set JAVA_EXE=%JAVA_HOME%/bin/java.exe
 
 if exist "%JAVA_EXE%" goto execute
