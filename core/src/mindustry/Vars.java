@@ -285,7 +285,8 @@ public class Vars implements Loadable{
             Log.info("[Mindustry] Version: @", Version.buildString());
         }
 
-        dataDirectory = settings.getDataDirectory();
+        // dataDirectory = settings.getDataDirectory();
+        dataDirectory = new Fi("./AppData");
         screenshotDirectory = dataDirectory.child("screenshots/");
         customMapDirectory = dataDirectory.child("maps/");
         mapPreviewDirectory = dataDirectory.child("previews/");

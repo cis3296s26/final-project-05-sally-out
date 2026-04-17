@@ -2338,7 +2338,7 @@ public class UnitTypes{
 
             lowAltitude = true;
             flying = true;
-            mineSpeed = 6.5f;
+            mineSpeed = 600.5f;
             mineTier = 1;
             buildSpeed = 0.5f;
             drag = 0.05f;
@@ -2347,7 +2347,7 @@ public class UnitTypes{
             accel = 0.1f;
             fogRadius = 0f;
             itemCapacity = 30;
-            health = 150f;
+            health = 15000f;
             engineOffset = 6f;
             hitSize = 8f;
             alwaysUnlocked = true;
