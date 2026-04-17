@@ -1,0 +1,27 @@
+type: crawl
+name: infantry
+health: 120
+speed: 0.5
+hitSize: 9
+
+weapons: [
+  {
+    reload: 110
+    x: 0
+    y: 0
+    shootY: 4
+    inaccuracy: 4
+
+    shoot: {
+      shots: 2
+      shotDelay: 3
+    }
+
+    bullet: {
+      type: BasicBulletType
+      speed: 3
+      damage: 25
+      lifetime: 60
+    }
+  }
+]

@@ -1,0 +1,22 @@
+type: crawl
+name: artillery
+health: 260
+speed: 0.3
+hitSize: 13
+
+weapons: [
+  {
+    reload: 180
+    x: 0
+    y: 0
+
+    bullet: {
+      type: ArtilleryBulletType
+      speed: 2.5
+      damage: 80
+      splashDamage: 50
+      splashDamageRadius: 30
+      lifetime: 100
+    }
+  }
+]
