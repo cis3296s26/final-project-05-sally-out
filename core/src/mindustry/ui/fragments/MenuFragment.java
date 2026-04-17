@@ -16,9 +16,12 @@ import arc.struct.*;
 import arc.util.*;
 import mindustry.core.*;
 import mindustry.game.EventType.*;
+import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
+import mindustry.maps.*;
 import mindustry.ui.*;
+import mindustry.ui.fragments.MenuFragment.MenuButton;
 
 import static mindustry.Vars.*;
 import static mindustry.gen.Tex.*;
@@ -188,18 +191,19 @@ public class MenuFragment{
             t.name = "buttons";
 
             buttons(t,
-                new MenuButton("@play", Icon.play,
+                new MenuButton("@play_NOT_ME", Icon.play,
                     new MenuButton("@campaign", Icon.play, () -> checkPlay(ui.planet::show)),
                     new MenuButton("@joingame", Icon.add, () -> checkPlay(ui.join::show)),
                     new MenuButton("@customgame", Icon.terrain, () -> checkPlay(ui.custom::show)),
                     new MenuButton("@loadgame", Icon.download, () -> checkPlay(ui.load::show))
                 ),
-                new MenuButton("@database.button", Icon.menu,
-                    new MenuButton("@schematics", Icon.paste, ui.schematics::show),
-                    new MenuButton("@database", Icon.book, ui.database::show),
-                    new MenuButton("@about.button", Icon.info, ui.about::show)
-                ),
-                new MenuButton("@editor", Icon.terrain, () -> checkPlay(ui.maps::show)), steam ? new MenuButton("@workshop", Icon.steam, platform::openWorkshop) : null,
+                new MenuButton("Quick Play", Icon.play, () -> checkPlay(this::startQuickGame)),
+                // new MenuButton("@database.button", Icon.menu,
+                //     new MenuButton("@schematics", Icon.paste, ui.schematics::show),
+                //     new MenuButton("@database", Icon.book, ui.database::show),
+                //     new MenuButton("@about.button", Icon.info, ui.about::show)
+                // ),
+                // new MenuButton("@editor", Icon.terrain, () -> checkPlay(ui.maps::show)), steam ? new MenuButton("@workshop", Icon.steam, platform::openWorkshop) : null,
                 new MenuButton("@mods", Icon.book, ui.mods::show),
                 new MenuButton("@settings", Icon.settings, ui.settings::show)
             );
@@ -217,6 +221,38 @@ public class MenuFragment{
 
         }).width(width).growY();
     }
+
+private void startQuickGame() {
+    boolean showCustom = Core.settings.getBool("editorshowcustommaps", true);
+    boolean showBuiltIn = Core.settings.getBool("editorshowbuiltinmaps", true);
+
+    Seq<Map> mapList = showCustom ?
+        (showBuiltIn ? maps.all() : maps.customMaps()) :
+        (showBuiltIn ? maps.defaultMaps() : null);
+
+    if (mapList == null || mapList.isEmpty()) {
+        ui.showErrorMessage("@maps.none");
+        return;
+    }
+
+    Map foundMap = mapList.find(m -> m.name().equals("Ground Zero"));
+    if (foundMap == null) {
+        foundMap = mapList.first();
+    }
+
+    final Map targetMap = foundMap;
+
+    Gamemode mode = Gamemode.survival.valid(targetMap) ? Gamemode.survival :
+        Structs.find(Gamemode.all, m -> m.valid(targetMap));
+    if (mode == null) mode = Gamemode.survival;
+
+    Rules rules = targetMap.applyRules(mode);
+    control.playMap(targetMap, rules);
+}
+
+
+
+
 
     private void checkPlay(Runnable run){
         if(!mods.hasContentErrors()){

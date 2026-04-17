@@ -1,10 +1,15 @@
 package mindustry.ai;
+import mindustry.world.meta.BlockFlag;
 
+import mindustry.Vars;
+import mindustry.entities.*;
+import mindustry.entities.Units;
 import arc.*;
 import arc.func.*;
 import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
+import mindustry.ai.Pathfinder.Flowfield;
 import mindustry.annotations.Annotations.*;
 import mindustry.core.*;
 import mindustry.game.EventType.*;
@@ -17,8 +22,12 @@ import mindustry.world.meta.*;
 
 import static mindustry.Vars.*;
 
+import java.sql.Time;
+
+import javax.swing.text.Position;
+
 public class Pathfinder implements Runnable{
-    private static final long maxUpdate = Time.millisToNanos(8);
+    private static final long maxUpdate = 8 * 1_000_000L; // 8 milliseconds in nanoseconds
     private static final int updateFPS = 60;
     private static final int updateInterval = 1000 / updateFPS;
 
@@ -27,12 +36,13 @@ public class Pathfinder implements Runnable{
 
     static final int impassable = -1;
 
-    public static final int
-        fieldCore = 0;
+public static final int fieldCore = 0;
+        public static final int fieldPlayer = 1; // good god please work
 
-    public static final Seq<Prov<Flowfield>> fieldTypes = Seq.with(
-        EnemyCoreField::new
-    );
+public static final Seq<Prov<Flowfield>> fieldTypes = Seq.with(
+    EnemyCoreField::new,
+    PlayerTargetField::new
+);
 
     public static final int
         costGround = 0,
@@ -96,7 +106,6 @@ public class Pathfinder implements Runnable{
                 tiles[i] = packTile(tile);
             }
 
-            //don't bother setting up paths unless necessary
             if(state.rules.waveTeam.needsFlowField() && !net.client()){
                 preloadPath(getField(state.rules.waveTeam, costGround, fieldCore));
                 Log.debug("Preloading ground enemy flowfield.");
@@ -107,8 +116,10 @@ public class Pathfinder implements Runnable{
                     Log.debug("Preloading naval enemy flowfield.");
                 }
 
+                // ADD THESE LINES:
+                preloadPath(getField(state.rules.waveTeam, costGround, fieldPlayer));
+                Log.debug("Preloading player-target flowfield.");
             }
-
             start();
         });
 
@@ -269,7 +280,13 @@ public class Pathfinder implements Runnable{
                 }
 
                 try{
-                    Thread.sleep(updateInterval);
+long lastLogTime = System.currentTimeMillis();
+// Inside the while(true) loop:
+Thread.sleep(updateInterval);
+if(System.currentTimeMillis() - lastLogTime > 5000){
+    Log.debug("Pathfinder thread alive, fields: @", threadList.size);
+    lastLogTime = System.currentTimeMillis();
+}
                 }catch(InterruptedException e){
                     //stop looping when interrupted externally
                     return;
@@ -304,8 +321,8 @@ public class Pathfinder implements Runnable{
         }
 
         //if refresh rate is positive, queue a refresh
-        if(path.refreshRate > 0 && Time.timeSinceMillis(path.lastUpdateTime) > path.refreshRate){
-            path.lastUpdateTime = Time.millis();
+        if(path.refreshRate > 0 && (System.currentTimeMillis() - path.lastUpdateTime) > path.refreshRate){
+    path.lastUpdateTime = System.currentTimeMillis();
 
             tmpArray.clear();
             path.getPositions(tmpArray);
@@ -378,7 +395,7 @@ public class Pathfinder implements Runnable{
      * Pathfinding thread only.
      */
     private void registerPath(Flowfield path){
-        path.lastUpdateTime = Time.millis();
+        path.lastUpdateTime = System.currentTimeMillis();
         path.setup(tiles.length);
 
         threadList.add(path);
@@ -402,7 +419,7 @@ public class Pathfinder implements Runnable{
     /** Update the frontier for a path. Pathfinding thread only. */
     private void updateFrontier(Flowfield path, long nsToRun){
         boolean hadAny = path.frontier.size > 0;
-        long start = Time.nanos();
+        long start = System.nanoTime();
 
         int counter = 0;
 
@@ -438,7 +455,7 @@ public class Pathfinder implements Runnable{
             //every N iterations, check the time spent - this prevents extra calls to nano time, which itself is slow
             if(nsToRun >= 0 && (counter++) >= 200){
                 counter = 0;
-                if(Time.timeSinceNanos(start) >= nsToRun){
+                if(System.nanoTime() - start >= nsToRun){
                     return;
                 }
             }
@@ -467,6 +484,48 @@ public class Pathfinder implements Runnable{
         }
     }
 
+
+
+//NEW NEW NEW
+    
+    public static class PlayerTargetField extends Flowfield{
+    public PlayerTargetField(){
+        this.refreshRate = 500;
+    }
+
+    @Override
+    protected void getPositions(IntSeq out){
+        mindustry.gen.Player player = mindustry.Vars.player;
+        if(player == null) return;
+
+        // first try player's controlled unit
+        mindustry.gen.Unit playerUnit = player.unit();
+        if(playerUnit != null && playerUnit.team != team){
+            out.add(playerUnit.tileOn().array());
+            arc.util.Log.debug("PlayerTargetField: targeting player unit at @, @", playerUnit.tileX(), playerUnit.tileY());
+            return;
+        }
+
+        // then try player's closest core
+        mindustry.gen.Building core = player.bestCore();
+        if(core != null && core.team != team){
+            out.add(core.tile.array());
+            arc.util.Log.debug("PlayerTargetField: targeting player core at @, @", core.tileX(), core.tileY());
+            return;
+        }
+
+        // fallback to any enemy core THIS NEVER FUCKING WORKS!!!!!!! FUCK!!! KJILL YOURSELF
+        arc.util.Log.debug("PlayerTargetField: falling back to enemy cores");
+        for(mindustry.gen.Building other : indexer.getEnemy(team, mindustry.world.meta.BlockFlag.core)){
+            out.add(other.tile.array());
+        }
+    }
+}
+
+
+
+
+
     public static class PositionTarget extends Flowfield{
         public final Position position;
 
@@ -477,7 +536,7 @@ public class Pathfinder implements Runnable{
 
         @Override
         public void getPositions(IntSeq out){
-            out.add(world.packArray(World.toTile(position.getX()), World.toTile(position.getY())));
+            out.add(world.packArray(World.toTile(((arc.math.geom.Position)position).getX()), World.toTile(((arc.math.geom.Position)position).getY())));
         }
     }
 
