@@ -19,7 +19,7 @@ public class BaseSallyOutUnitDefs {
     // Load
     public static void load() {
         // --- Spearman ---
-        spearman = new BaseSallyOutUnitType("tactical-spearman") {{
+        spearman = new BaseSallyOutUnitType("spearman") {{
             // Re-use mace sprite/constructor
             constructor = UnitTypes.mace.constructor;
             health      = 200f;
@@ -39,7 +39,7 @@ public class BaseSallyOutUnitDefs {
         }};
 
         // --- Swordsman ---
-        swordsman = new BaseSallyOutUnitType("tactical-swordsman") {{
+        swordsman = new BaseSallyOutUnitType("swordsman") {{
             constructor = UnitTypes.dagger.constructor;
             health      = 350f;
             speed       = 1.1f;
@@ -58,7 +58,7 @@ public class BaseSallyOutUnitDefs {
         }};
 
         // --- Archer ---
-        archer = new BaseSallyOutUnitType("tactical-archer") {{
+        archer = new BaseSallyOutUnitType("archer") {{
             constructor = UnitTypes.dagger.constructor;
             health      = 150f;
             speed       = 1.4f;
@@ -81,7 +81,7 @@ public class BaseSallyOutUnitDefs {
         }};
 
         // --- Knight ---
-        knight = new BaseSallyOutUnitType("tactical-knight") {{
+        knight = new BaseSallyOutUnitType("knight") {{
             constructor = UnitTypes.fortress.constructor;
             health      = 500f;
             speed       = 0.9f;
@@ -100,7 +100,7 @@ public class BaseSallyOutUnitDefs {
         }};
 
         // --- Scout ---
-        scout = new BaseSallyOutUnitType("tactical-scout") {{
+        scout = new BaseSallyOutUnitType("scout") {{
             constructor = UnitTypes.dagger.constructor;
             health      = 80f;
             speed       = 2.2f;
@@ -120,7 +120,7 @@ public class BaseSallyOutUnitDefs {
         }};
 
         // --- Cataphract (heavy cavalry) ---
-        cataphract = new BaseSallyOutUnitType("tactical-cataphract") {{
+        cataphract = new BaseSallyOutUnitType("cataphract") {{
             constructor = UnitTypes.fortress.constructor;
             health      = 600f;
             speed       = 1.6f;
@@ -142,7 +142,7 @@ public class BaseSallyOutUnitDefs {
         }};
 
         // --- Gryphon (flying melee) ---
-        gryphon = new BaseSallyOutUnitType("tactical-gryphon") {{
+        gryphon = new BaseSallyOutUnitType("gryphon") {{
             constructor = UnitTypes.vela.constructor;
             health      = 280f;
             speed       = 1.8f;
@@ -163,7 +163,7 @@ public class BaseSallyOutUnitDefs {
         }};
 
         // --- General (command / morale unit) ---
-        general = new BaseSallyOutUnitType("tactical-general") {{
+        general = new BaseSallyOutUnitType("general") {{
             constructor = UnitTypes.scepter.constructor;
             health      = 300f;
             speed       = 1.0f;
