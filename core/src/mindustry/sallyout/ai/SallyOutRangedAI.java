@@ -8,6 +8,59 @@ import mindustry.sallyout.BaseSallyOutUnitEntity;
 import mindustry.sallyout.BaseSallyOutUnitType;
 import mindustry.sallyout.BaseSallyOutUnitStats;
 
+
+import arc.math.Angles;
+import arc.math.geom.Vec2;
+import mindustry.type.UnitType;
+
+import arc.*;
+import arc.func.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.struct.*;
+import arc.util.*;
+import mindustry.content.*;
+import mindustry.game.EventType.*;
+import mindustry.game.*;
+import mindustry.game.Teams.*;
+import mindustry.gen.*;
+import mindustry.logic.*;
+import mindustry.type.*;
+import mindustry.world.*;
+import mindustry.world.meta.*;
+
+
+import mindustry.content.UnitTypes;
+import mindustry.sallyout.ai.SallyOutRangedAI;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.struct.*;
+import arc.util.*;
+import mindustry.ai.*;
+import mindustry.ai.types.*;
+import mindustry.annotations.Annotations.*;
+import mindustry.entities.*;
+import mindustry.entities.abilities.*;
+import mindustry.entities.bullet.*;
+import mindustry.entities.effect.*;
+import mindustry.entities.part.*;
+import mindustry.entities.pattern.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
+import mindustry.type.*;
+import mindustry.type.ammo.*;
+import mindustry.type.unit.*;
+import mindustry.type.weapons.*;
+import mindustry.world.meta.*;
+
+import static arc.graphics.g2d.Draw.*;
+import static arc.graphics.g2d.Lines.*;
+import static arc.math.Angles.*;
+import static mindustry.Vars.*;
+
+
 /**
  * SallyOutRangedAI
  * ================
@@ -91,7 +144,7 @@ public class SallyOutRangedAI extends AIController {
     private Unit findNearestEnemy(Unit unit) {
         final Unit[] best = {null};
         final float[] bestDst = {Float.MAX_VALUE};
-        mindustry.gen.Groups.unit.each(other -> {
+        Groups.unit.each(other -> {
             if (other.team() == unit.team() || other.dead()) return;
             float d = unit.dst(other);
             if (d < bestDst[0]) { bestDst[0] = d; best[0] = other; }
@@ -102,7 +155,7 @@ public class SallyOutRangedAI extends AIController {
     private Unit findEnemyInRange(Unit unit, float range) {
         final Unit[] best = {null};
         final float[] bestDst = {Float.MAX_VALUE};
-        mindustry.gen.Groups.unit.each(other -> {
+        Groups.unit.each(other -> {
             if (other.team() == unit.team() || other.dead()) return;
             float d = unit.dst(other);
             if (d <= range && d < bestDst[0]) { bestDst[0] = d; best[0] = other; }

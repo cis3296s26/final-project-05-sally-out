@@ -32,6 +32,30 @@ import mindustry.ui.Styles;
 
 import java.util.ArrayList;
 import java.util.List;
+import mindustry.content.*;
+import mindustry.core.*;
+import mindustry.ctype.*;
+import mindustry.entities.units.*;
+import mindustry.game.EventType.*;
+import mindustry.game.Schematic.*;
+import mindustry.gen.*;
+import mindustry.input.*;
+import mindustry.input.Placement.*;
+import mindustry.io.*;
+import mindustry.world.*;
+import mindustry.world.blocks.ConstructBlock.*;
+import mindustry.world.blocks.distribution.*;
+import mindustry.world.blocks.legacy.*;
+import mindustry.world.blocks.power.*;
+import mindustry.world.blocks.sandbox.*;
+import mindustry.world.blocks.storage.*;
+import mindustry.world.blocks.storage.CoreBlock.*;
+import mindustry.world.meta.*;
+
+import java.io.*;
+import java.util.zip.*;
+
+import static mindustry.Vars.*;
 
 /**
  * SetupPhaseUI
@@ -162,7 +186,7 @@ public class SetupPhaseUI {
 
         // ── Drag ghost icon ──────────────────────────────────────────────────
         dragIcon = new Image();
-        dragIcon.setVisible(false);
+        dragIcon.visible = false;
         dragIcon.setSize(48f, 48f);
         root.addChild(dragIcon);
 
@@ -179,12 +203,11 @@ public class SetupPhaseUI {
             }
 
             @Override
-            public boolean touchUp(InputEvent event, float x, float y, int pointer, KeyCode button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, KeyCode button) {
                 if (dragType != null) {
                     tryPlaceUnit(x, y);
                     endDrag();
                 }
-                return false;
             }
         });
     }
@@ -210,38 +233,50 @@ public class SetupPhaseUI {
             card.add(statsCol).growX().left();
 
             // Drag initiator
-            card.addListener(new InputListener() {
+          card.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, KeyCode button) {
                     int remaining = SallyOutGamemode.get() != null
-                        ? SallyOutGamemode.get().remainingSupply(Vars.player.team())
-                        : SetupPhaseUI.this.budget;
-                    if (ts.cost > remaining) return false;
-                    beginDrag(type, event.stageX, event.stageY);
-                    return true;
+                        ? SallyOutGamemode.get().remainingSupply(Vars.player.team)
+                        : budget;
+
+                    if (remaining >= ts.cost) {
+                        beginDrag(type); // Call the simplified version
+                        return true; 
+                    }
+                    return false;
                 }
             });
-
             list.add(card).growX().pad(4f).row();
         }
     }
+
+
 
     // -------------------------------------------------------------------------
     // Drag helpers
     // -------------------------------------------------------------------------
 
-    private void beginDrag(UnitType type, float sx, float sy) {
-        dragType = type;
-        dragX    = sx;
-        dragY    = sy;
+    // private void beginDrag(UnitType type, float sx, float sy) {
+    //     dragType = type;
+    //     dragX    = sx;
+    //     dragY    = sy;
+    //     dragIcon.setDrawable(type.uiIcon);
+    //     dragIcon.visible = true;
+    //     dragIcon.setPosition(sx - 24f, sy - 24f);
+    // }
+    private void beginDrag(UnitType type) {
+        this.dragType = type;
         dragIcon.setDrawable(type.uiIcon);
-        dragIcon.setVisible(true);
-        dragIcon.setPosition(sx - 24f, sy - 24f);
+        dragIcon.visible = true;
+        // Move icon to current mouse position immediately
+        Vec2 mouse = Core.input.mouse();
+        dragIcon.setPosition(mouse.x - 24f, mouse.y - 24f);
     }
 
     private void endDrag() {
         dragType = null;
-        dragIcon.setVisible(false);
+        dragIcon.visible = false;
     }
 
     // -------------------------------------------------------------------------

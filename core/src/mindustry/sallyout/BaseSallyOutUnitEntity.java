@@ -2,8 +2,56 @@ package mindustry.sallyout;
 
 import arc.math.Angles;
 import arc.math.geom.Vec2;
-import mindustry.gen.*;
 import mindustry.type.UnitType;
+
+import arc.*;
+import arc.func.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.struct.*;
+import arc.util.*;
+import mindustry.content.*;
+import mindustry.game.EventType.*;
+import mindustry.game.*;
+import mindustry.game.Teams.*;
+import mindustry.gen.*;
+import mindustry.logic.*;
+import mindustry.type.*;
+import mindustry.world.*;
+import mindustry.world.meta.*;
+
+
+import mindustry.content.UnitTypes;
+import mindustry.sallyout.ai.SallyOutRangedAI;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.struct.*;
+import arc.util.*;
+import mindustry.ai.*;
+import mindustry.ai.types.*;
+import mindustry.annotations.Annotations.*;
+import mindustry.entities.*;
+import mindustry.entities.abilities.*;
+import mindustry.entities.bullet.*;
+import mindustry.entities.effect.*;
+import mindustry.entities.part.*;
+import mindustry.entities.pattern.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
+import mindustry.type.*;
+import mindustry.type.ammo.*;
+import mindustry.type.unit.*;
+import mindustry.type.weapons.*;
+import mindustry.world.meta.*;
+
+import static arc.graphics.g2d.Draw.*;
+import static arc.graphics.g2d.Lines.*;
+import static arc.math.Angles.*;
+import static mindustry.Vars.*;
+
+
 
 /**
  * Runtime mutable state for one unit participating in the Sally-Out PvP mode.
@@ -272,7 +320,7 @@ public class BaseSallyOutUnitEntity {
     public void broadcastOrgAura() {
         if (stats.organizationRadiusBonus == 0f || stats.organizationRadius == 0f) return;
         float r = stats.organizationRadius;
-        mindustry.Vars.unitGroups[unit.team().id].each(ally -> {
+        Groups.unit.each(u -> u.team(),ally -> {
             if (ally == unit) return;
             float dst = ally.dst(unit);
             if (dst <= r) {

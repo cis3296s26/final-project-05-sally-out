@@ -41,7 +41,7 @@ public class SetupPhaseOverlay {
         }
 
         // ── Per-unit status bars ─────────────────────────────────────────────
-        mindustry.gen.Groups.unit.each(unit -> {
+        Groups.unit.each(unit -> {
             var entity = SallyOutGamemode.getEntity(unit);
             if (entity == null) return;
             drawUnitBars(unit, entity);
@@ -82,7 +82,7 @@ public class SetupPhaseOverlay {
 
         // HP bar (green → red)
         float hpFrac = unit.health() / unit.maxHealth();
-        drawBar(x, y,             bw, bh, hpFrac, Pal.health,     Pal.healthBack);
+        drawBar(x, y,             bw, bh, hpFrac, Pal.health,     Color.darkGray);
 
         // Organisation bar (cyan)
         float orgFrac = entity.organization / entity.stats.maxOrganization;
