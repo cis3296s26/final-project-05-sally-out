@@ -21,7 +21,7 @@ import mindustry.sallyout.BaseSallyOutUnitStats;
  *
  * Player commands override this AI via the standard Mindustry command system.
  */
-public class TacticalRangedAI extends AIController {
+public class SallyOutRangedAI extends AIController {
 
     private static final Vec2 tmpVec = new Vec2();
 
