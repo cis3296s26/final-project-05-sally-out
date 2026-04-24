@@ -15,6 +15,7 @@ import mindustry.game.EventType.*;
 import mindustry.game.*;
 import mindustry.game.Teams.*;
 import mindustry.gen.*;
+import mindustry.gen.Groups;
 import mindustry.logic.*;
 import mindustry.type.*;
 import mindustry.world.*;
@@ -320,7 +321,7 @@ public class BaseSallyOutUnitEntity {
     public void broadcastOrgAura() {
         if (stats.organizationRadiusBonus == 0f || stats.organizationRadius == 0f) return;
         float r = stats.organizationRadius;
-        Groups.unit.each(u -> u.team(),ally -> {
+        Groups.unit.each(u -> u.team() == unit.team(), ally -> {
             if (ally == unit) return;
             float dst = ally.dst(unit);
             if (dst <= r) {
