@@ -1,6 +1,6 @@
 package mindustry.sallyout;
 
-public class BaseSallyOutUnit {
+public class BaseSallyOutUnitStats {
     //Stats
     public float maxOrganization = 100f; //morale, unit flees when under <= 0
     public float currentOrganization = 100f; //current morale
