@@ -9,7 +9,7 @@ import mindustry.sallyout.BaseSallyOutUnitType;
 import mindustry.sallyout.BaseSallyOutUnitStats;
 
 /**
- * TacticalRangedAI
+ * SallyOutRangedAI
  * ================
  * AI controller for player-commanded units with ranged capabilities.
  *

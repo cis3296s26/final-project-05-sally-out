@@ -1,4 +1,4 @@
-package mindustry.pvp;
+package mindustry.sallyout;
 
 import arc.Events;
 import arc.math.geom.Rect;
@@ -13,7 +13,7 @@ import mindustry.game.Team;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.gen.Unit;
-import mindustry.pvp.ui.SetupPhaseUI;
+import mindustry.sallyout.ui.SetupPhaseUI;
 import mindustry.type.UnitType;
 
 /**
