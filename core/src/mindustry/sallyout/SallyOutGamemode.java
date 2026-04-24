@@ -59,7 +59,7 @@ public class SallyOutGamemode {
     private static final int AURA_INTERVAL_TICKS = 30;
 
     // Runtime state
-    /** Maps unit.id -> BaseSallyOutUnitEntity for every active tactical unit. */
+    /** Maps unit.id -> BaseSallyOutUnitEntity for every active unit. */
     private static final IntMap<BaseSallyOutUnitEntity> entityMap = new IntMap<>();
     /** Tracks which units are currently in melee contact. */
     private static final IntMap<Boolean> inMeleeMap = new IntMap<>();

@@ -32,7 +32,7 @@ public class BaseSallyOutUnitEntity {
     /** The Mindustry unit this state belongs to. */
     public final Unit unit;
 
-    /** Cached tactical stat blueprint for this unit's type. */
+    /** Cached stat blueprint for this unit's type. */
     public final BaseSallyOutUnitStats stats;
 
     // -------------------------------------------------------------------------
@@ -90,7 +90,7 @@ public class BaseSallyOutUnitEntity {
 
     public BaseSallyOutUnitEntity(Unit unit) {
         this.unit  = unit;
-        this.stats = BaseSallyOutUnitType.tacticalStats(unit.type());
+        this.stats = BaseSallyOutUnitType.BaseSallyOutUnitStats(unit.type());
         this.organization = stats.maxOrganization;
         this.stamina      = stats.maxStamina;
         this.isFlying     = stats.flying;

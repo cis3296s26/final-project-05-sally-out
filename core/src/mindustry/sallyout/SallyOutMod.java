@@ -26,7 +26,7 @@ public class SallyOutMod extends Mod {
 
     @Override
     public void loadContent() {
-        // Register all tactical unit types into Mindustry's content registry
+        // Register all unit types into Mindustry's content registry
         BaseSallyOutUnitDefs.load();
     }
 

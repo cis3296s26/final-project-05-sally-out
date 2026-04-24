@@ -191,7 +191,7 @@ public class SetupPhaseUI {
 
     private void buildUnitList(Table list) {
         for (UnitType type : getCatalogue()) {
-            BaseSallyOutUnitStats ts = BaseSallyOutUnitType.tacticalStats(type);
+            BaseSallyOutUnitStats ts = BaseSallyOutUnitType.BaseSallyOutUnitStats(type);
             Table card = new Table(Styles.black5);
             card.defaults().pad(2f);
 
@@ -265,7 +265,7 @@ public class SetupPhaseUI {
             return;
         }
 
-        BaseSallyOutUnitStats ts = BaseSallyOutUnitType.tacticalStats(dragType);
+        BaseSallyOutUnitStats ts = BaseSallyOutUnitType.BaseSallyOutUnitStats(dragType);
         if (!gm.trySpendSupply(Vars.player.team(), ts.cost)) {
             flashError("[red]Not enough supply budget[]");
             return;
