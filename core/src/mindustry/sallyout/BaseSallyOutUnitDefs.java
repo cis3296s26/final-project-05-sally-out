@@ -1,7 +1,7 @@
 package mindustry.sallyout;
 
 import mindustry.content.UnitTypes;
-import mindustry.sallyout.ai.TacticalRangedAI;
+import mindustry.sallyout.ai.SallyOutRangedAI;
 
 
 public class BaseSallyOutUnitDefs {

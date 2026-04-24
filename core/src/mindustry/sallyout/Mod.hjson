@@ -1,0 +1,9 @@
+{
+    name:           "Sally Out PvP"
+    author:         "Team 3"
+    description:    "Tactical PvP gamemode with drag-and-drop setup phase, supply budgets, stamina, organisation, directional combat, and flying units."
+    version:        "1.0.0"
+    minGameVersion: "146"
+    main:           "mindustry.pvp.SallyOutMod"
+    java:           true
+}
