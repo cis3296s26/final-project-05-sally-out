@@ -6,7 +6,7 @@ import arc.util.*;
 import mindustry.maps.*;
 
 /** Defines preset rule sets. */
-public enum Gamemode{
+public enum Gamemode {
     survival(rules -> {
         rules.waveTimer = true;
         rules.waves = true;
@@ -17,8 +17,7 @@ public enum Gamemode{
         rules.waveTimer = false;
     }),
     attack(rules -> {
-        rules.attackMode = true;
-        //TODO waves is now a bad idea
+        rules.attackMode = true;//TODO waves is now a bad idea
         //rules.waves = true;
         rules.waveTimer = true;
 
@@ -38,7 +37,15 @@ public enum Gamemode{
         rules.editor = true;
         rules.waves = false;
         rules.waveTimer = false;
-    });
+    }), //TODO Kevin added sallyout gamemode
+    sallyout(rules -> {
+        rules.pvp = true;
+        rules.enemyCoreBuildRadius = 600f;
+        rules.buildCostMultiplier = 1f;
+        rules.buildSpeedMultiplier = 1f;
+        rules.unitBuildSpeedMultiplier = 2f;
+        rules.attackMode = true;
+    }, map -> map.teams.size > 1);
 
     private final Cons<Rules> rules;
     private final Boolf<Map> validator;
@@ -46,41 +53,41 @@ public enum Gamemode{
     public final boolean hidden;
     public final static Gamemode[] all = values();
 
-    Gamemode(Cons<Rules> rules){
+    Gamemode(Cons<Rules> rules) {
         this(false, rules);
     }
 
-    Gamemode(boolean hidden, Cons<Rules> rules){
-         this(hidden, rules, m -> true);
+    Gamemode(boolean hidden, Cons<Rules> rules) {
+        this(hidden, rules, m -> true);
     }
 
-    Gamemode(Cons<Rules> rules, Boolf<Map> validator){
+    Gamemode(Cons<Rules> rules, Boolf<Map> validator) {
         this(false, rules, validator);
     }
 
-    Gamemode(boolean hidden, Cons<Rules> rules, Boolf<Map> validator){
+    Gamemode(boolean hidden, Cons<Rules> rules, Boolf<Map> validator) {
         this.rules = rules;
         this.hidden = hidden;
         this.validator = validator;
     }
 
     /** Applies this preset to this ruleset. */
-    public Rules apply(Rules in){
+    public Rules apply(Rules in) {
         rules.get(in);
         return in;
     }
 
     /** @return whether this mode can be played on the specified map. */
-    public boolean valid(Map map){
+    public boolean valid(Map map) {
         return validator.get(map);
     }
 
-    public String description(){
+    public String description() {
         return Core.bundle.get("mode." + name() + ".description");
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return Core.bundle.get("mode." + name() + ".name");
     }
 }
