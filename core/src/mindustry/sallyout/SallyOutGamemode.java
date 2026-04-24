@@ -17,7 +17,7 @@ import mindustry.pvp.ui.SetupPhaseUI;
 import mindustry.type.UnitType;
 
 /**
- * TacticalGamemode – orchestrates the Sally-Out PvP mode.
+ * SallyOutGamemode – orchestrates the Sally-Out PvP mode.
  *
  * Life-cycle
  * ----------
@@ -39,14 +39,14 @@ import mindustry.type.UnitType;
  *
  * How to hook in
  * --------------
- * Call {@code TacticalGamemode.init()} once from your mod/plugin entry point.
+ * Call {@code SallyOutGamemode.init()} once from your mod/plugin entry point.
  * The singleton listens to Mindustry's event bus.
  */
-public class TacticalGamemode {
+public class SallyOutGamemode {
 
     // Singleton
-    private static TacticalGamemode INSTANCE;
-    public static TacticalGamemode get() { return INSTANCE; }
+    private static SallyOutGamemode INSTANCE;
+    public static SallyOutGamemode get() { return INSTANCE; }
   
     // Configuration constants
     /** Supply points each player may spend. */
@@ -73,7 +73,7 @@ public class TacticalGamemode {
 
     // Init
     public static void init() {
-        INSTANCE = new TacticalGamemode();
+        INSTANCE = new SallyOutGamemode();
         INSTANCE.registerEvents();
     }
     private void registerEvents() {

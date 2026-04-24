@@ -10,6 +10,8 @@ public class BaseSallyOutUnitStats {
     public float defense = 5f; //lat subtraction from every hit, halved when charging
     public float meleeAttack = 10f; //damage per tick in contact
     public float meleeOrgDrain = 2f; //morale drain on target while attacking
+    public float rangeRadius = 0f;
+    public float rangeAttack = 0f;
     public float chargeBonus = 1.5f; //
     public float chargeResistance = 1.5f;
     public float maxStamina = 100f;
