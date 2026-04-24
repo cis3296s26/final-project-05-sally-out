@@ -17,9 +17,9 @@ public class BaseSallyOutUnitType extends UnitType {
 
     /**
      * Returns the BaseSallyOutUnitStats for any UnitType, using defaults when the
-     * unit was not defined as a TacticalUnitType.
+     * unit was not defined as a BaseSallyOutUnitType.
      */
-    public static BaseSallyOutUnitStats tacticalStats(UnitType type) {
+    public static BaseSallyOutUnitStats BaseSallyOutUnitStats(UnitType type) {
         if (type instanceof BaseSallyOutUnitType t) return t.tStats;
         return DEFAULT_STATS;
     }

@@ -148,19 +148,19 @@ public class SallyOutGamemode {
      * @return true if the spend succeeded (budget available), false otherwise.
      */
     public boolean trySpendSupply(Team team, int cost) {
-        int used = supplyUsed.get(team.id(), 0);
+        int used = supplyUsed.get(team.id, 0); //removed team.id()
         if (used + cost > DEFAULT_SUPPLY_BUDGET) return false;
-        supplyUsed.put(team.id(), used + cost);
+        supplyUsed.put(team.id, used + cost); //removed team.id()
         return true;
     }
     /** Returns remaining supply budget for the given team. */
     public int remainingSupply(Team team) {
-        return DEFAULT_SUPPLY_BUDGET - supplyUsed.get(team.id(), 0);
+        return DEFAULT_SUPPLY_BUDGET - supplyUsed.get(team.id, 0); //removed team.id()
     }
     /** Refunds the cost of a unit (called when a placed unit is removed during setup). */
     public void refundSupply(Team team, int cost) {
-        int used = supplyUsed.get(team.id(), 0);
-        supplyUsed.put(team.id(), Math.max(0, used - cost));
+        int used = supplyUsed.get(team.id, 0); //removed team.id()
+        supplyUsed.put(team.id, Math.max(0, used - cost)); //removed team.id()
     }
     /** Checks that the given world position is inside the correct deployment zone for the team. */
     public boolean inDeployZone(float wx, float wy, Team team) {

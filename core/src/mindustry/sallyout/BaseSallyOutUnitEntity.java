@@ -8,9 +8,9 @@ import mindustry.type.UnitType;
 /**
  * Runtime mutable state for one unit participating in the Sally-Out PvP mode.
  *
- * A TacticalUnitEntity is created and stored in {@link TacticalGamemode#entityMap}
+ * A BaseSallyOutUnitEntity is created and stored in {@link SallyoutGamemode#entityMap}
  * alongside every living unit.  It mirrors organisational / stamina / charge state
- * and is updated each game tick by TacticalGamemode.
+ * and is updated each game tick by SallyOutGamemode.
  *
  * Rectangular hitbox:
  *   Mindustry units already expose hitSize (radius).  We model the rectangular
@@ -21,7 +21,7 @@ import mindustry.type.UnitType;
  * Directional damage:
  *   When damage is applied via {@link #applyDirectionalDamage} the angle from
  *   the attacker to this unit is compared to this unit's facing rotation to
- *   determine front / flank / rear multipliers from TacticalUnitStats.
+ *   determine front / flank / rear multipliers from BaseSallyOutUnitStats.
  */
 public class BaseSallyOutUnitEntity {
 
@@ -97,7 +97,7 @@ public class BaseSallyOutUnitEntity {
     }
 
     // -------------------------------------------------------------------------
-    // Tick update  (called from TacticalGamemode each game tick)
+    // Tick update  (called from SallyOutGamemode each game tick)
     // -------------------------------------------------------------------------
 
     public void update() {
@@ -266,7 +266,7 @@ public class BaseSallyOutUnitEntity {
     // -------------------------------------------------------------------------
 
     /**
-     * Must be called every N ticks (e.g. every 30 ticks) by TacticalGamemode.
+     * Must be called every N ticks (e.g. every 30 ticks) by SallyOutGamemode.
      * Iterates nearby allied units and adjusts their organization.
      */
     public void broadcastOrgAura() {
@@ -276,7 +276,7 @@ public class BaseSallyOutUnitEntity {
             if (ally == unit) return;
             float dst = ally.dst(unit);
             if (dst <= r) {
-                TacticalUnitEntity allyEntity = TacticalGamemode.getEntity(ally);
+                BaseSallyOutUnitEntity allyEntity = SallyOutGamemode.getEntity(ally);
                 if (allyEntity != null) {
                     allyEntity.drainOrg(-stats.organizationRadiusBonus); // negative drain = gain
                 }

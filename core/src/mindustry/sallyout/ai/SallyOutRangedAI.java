@@ -26,9 +26,9 @@ public class SallyOutRangedAI extends AIController {
     private static final Vec2 tmpVec = new Vec2();
 
     @Override
-    public void updateMovement(Unit unit) {
+    public void updateMovement() { //removed (Unit unit)
         BaseSallyOutUnitEntity entity = SallyOutGamemode.getEntity(unit);
-        if (entity == null) { super.updateMovement(unit); return; }
+        if (entity == null) { super.updateMovement(); return; } //removed (Unit unit)
 
         BaseSallyOutUnitStats stats = entity.stats;
 
@@ -61,7 +61,7 @@ public class SallyOutRangedAI extends AIController {
         }
 
         // ── Default advance behaviour ─────────────────────────────────────────
-        super.updateMovement(unit);
+        super.updateMovement();
     }
 
     // Flying state machine

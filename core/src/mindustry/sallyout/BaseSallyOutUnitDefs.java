@@ -77,7 +77,7 @@ public class BaseSallyOutUnitDefs {
             tStats.maxOrganization  = 70f;
             tStats.maxStamina       = 90f;
             // Archers use the ranged AI
-            aiController = TacticalRangedAI::new;
+            aiController = SallyOutRangedAI::new;
         }};
 
         // --- Knight ---
