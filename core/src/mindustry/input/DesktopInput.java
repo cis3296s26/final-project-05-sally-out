@@ -11,48 +11,74 @@ import arc.math.geom.*;
 import arc.scene.*;
 import arc.scene.ui.layout.*;
 import arc.util.*;
+import arc.func.*;
+import arc.input.GestureDetector.*;
+import arc.scene.event.*;
+import arc.struct.*;
+
 import mindustry.*;
 import mindustry.core.*;
 import mindustry.entities.units.*;
+import mindustry.entities.*;
 import mindustry.game.EventType.*;
 import mindustry.game.*;
+import mindustry.game.Teams.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
+import mindustry.type.*;
 import mindustry.ui.*;
+import mindustry.ui.fragments.*;
 import mindustry.world.*;
+import mindustry.world.blocks.*;
+import mindustry.world.blocks.ConstructBlock.*;
+import mindustry.world.blocks.distribution.*;
+import mindustry.world.blocks.payloads.*;
+import mindustry.world.blocks.storage.*;
+import mindustry.world.blocks.storage.CoreBlock.*;
+import mindustry.world.meta.*;
+import mindustry.ai.*;
+import mindustry.ai.types.*;
+import mindustry.annotations.Annotations.*;
+import mindustry.content.*;
+import mindustry.input.Placement.*;
+import mindustry.net.*;
+import mindustry.net.Administration.*;
+
+import java.util.*;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
 import static mindustry.input.PlaceMode.*;
 
+
+
 public class DesktopInput extends InputHandler{
     public Vec2 movement = new Vec2();
-    /** Current cursor type. */
     public Cursor cursorType = SystemCursor.arrow;
-    /** Position where the player started dragging a line. */
     public int selectX = -1, selectY = -1, schemX = -1, schemY = -1;
-    /** Last known line positions.*/
     public int lastLineX, lastLineY, schematicX, schematicY;
-    /** Whether selecting mode is active. */
     public PlaceMode mode;
-    /** Animation scale for line. */
     public float selectScale;
-    /** Selected build plan for movement. */
     public @Nullable BuildPlan splan;
-    /** Whether player is currently deleting removal plans. */
     public boolean deleting = false, shouldShoot = false, panning = false;
-    /** Mouse pan speed. */
     public float panScale = 0.005f, panSpeed = 4.5f, panBoostSpeed = 15f;
-    /** Delta time between consecutive clicks. */
     public long selectMillis = 0;
-    /** Previously selected tile. */
     public Tile prevSelected;
+
+    // NEW NEW NEW// NEW NEW NEW
+    public @Nullable UnitType unitType;
+    public boolean unitPlacementMode;// NEW NEW NEW
 
     boolean showHint(){
         return ui.hudfrag.shown && Core.settings.getBool("hints") && selectPlans.isEmpty() &&
             (!isBuilding && !Core.settings.getBool("buildautopause") || player.unit().isBuilding() || !player.dead() && !player.unit().spawnedByCore());
     }
-
+// NEW NEW NEW// NEW NEW NEW// NEW NEW NEW// NEW NEW NEW// NEW NEW NEW
+    boolean withinPlaceRange(int tx, int ty){// NEW NEW NEW
+        return Mathf.dst(player.x, player.y, tx * tilesize + tilesize/2f, ty * tilesize + tilesize/2f) <= buildingRange;
+    } // NEW NEW NEW// NEW NEW NEW
+// NEW NEW NEW
+// NEW NEW NEW
     @Override
     public void buildUI(Group group){
         //building and respawn hints
@@ -124,7 +150,6 @@ public class DesktopInput extends InputHandler{
         Draw.reset();
     }
 
-    @Override
     public void drawBottom(){
         int cursorX = tileX(Core.input.mouseX());
         int cursorY = tileY(Core.input.mouseY());
@@ -200,6 +225,18 @@ public class DesktopInput extends InputHandler{
             }
         }
 
+        // unit placement preview
+        if (unitType != null && !commandMode) {
+            int previewX = tileX(Core.input.mouseX());
+            int previewY = tileY(Core.input.mouseY());
+            Draw.z(110f);
+            Draw.color(player.team().color, 0.4f);
+            TextureRegion region = unitType.uiIcon;
+            float drawX = previewX * tilesize + tilesize/2f;
+            float drawY = previewY * tilesize + tilesize/2f;
+            Draw.rect(region, drawX, drawY);
+            Draw.color();
+        }
         Draw.reset();
     }
 
@@ -433,27 +470,20 @@ public class DesktopInput extends InputHandler{
         table.image().color(Pal.gray).height(4f).colspan(4).growX();
         table.row();
         table.left().margin(0f).defaults().size(48f).left();
-
-        table.button(Icon.paste, Styles.clearNonei, () -> {
-            ui.schematics.show();
-        }).tooltip("@schematics");
-
-        table.button(Icon.book, Styles.clearNonei, () -> {
-            ui.database.show();
-        }).tooltip("@database");
-
-        table.button(Icon.tree, Styles.clearNonei, () -> {
-            ui.research.show();
-        }).visible(() -> state.isCampaign()).tooltip("@research");
-
-        table.button(Icon.map, Styles.clearNonei, () -> {
-            ui.planet.show();
-        }).visible(() -> state.isCampaign()).tooltip("@planetmap");
+        table.button(Icon.paste, Styles.clearNonei, () -> ui.schematics.show()).tooltip("@schematics");
+        table.button(Icon.book, Styles.clearNonei, () -> ui.database.show()).tooltip("@database");
+        table.button(Icon.tree, Styles.clearNonei, () -> ui.research.show()).visible(() -> state.isCampaign()).tooltip("@research");
+        table.button(Icon.map, Styles.clearNonei, () -> ui.planet.show()).visible(() -> state.isCampaign()).tooltip("@planetmap");
+        // unit placement toggle
+        table.button(Icon.units, Styles.clearNonei, () -> {
+            unitPlacementMode = !unitPlacementMode;
+            unitType = null;
+            block = null;
+        }).tooltip("@unit.placement").checked(b -> unitPlacementMode);
     }
 
     void pollInput(){
         if(scene.hasField()) return;
-
         Tile selected = tileAt(Core.input.mouseX(), Core.input.mouseY());
         int cursorX = tileX(Core.input.mouseX());
         int cursorY = tileY(Core.input.mouseY());
@@ -562,8 +592,48 @@ public class DesktopInput extends InputHandler{
             selectUnitsRect();
         }
 
-        if(Core.input.keyTap(Binding.select) && !Core.scene.hasMouse()){
+                if(Core.input.keyTap(Binding.select) && !Core.scene.hasMouse()){
             tappedOne = false;
+            
+
+            // UNIT PLACEMENT
+if (unitType != null && !commandMode && unitPlacementMode) {
+    Log.info("Attempting to spawn unit: @ at (@, @)", unitType, rawCursorX, rawCursorY);
+    int tx = rawCursorX;
+    int ty = rawCursorY;
+    Tile tile = world.tile(tx, ty);// NEW NEW NEW
+    if (tile == null) {
+        Log.info("Tile is null");// NEW NEW NEW
+        return;
+    }
+    if (tile.solid()) {
+        Log.info("solidTile");// NEW NEW NEW// NEW NEW NEW
+        return;
+    }
+    if (tile.build != null) {
+        Log.info("building ovlerpal");
+        return;
+    }// NEW NEW NEW
+    if (!withinPlaceRange(tx, ty)) {
+        Log.info("out of range");
+        return;
+    }// NEW NEW NEW
+    Unit unit = unitType.spawn(player.team(), tile.worldx(), tile.worldy());
+    if (unit == null) {
+        Log.info("spawn returned null");
+    } else {
+        unit.add();// NEW NEW NEW
+        Events.fire(new UnitCreateEvent(unit, null));
+        Log.info("unit spawned successfully");
+    }
+    return;
+}// NEW NEW NEW
+
+
+// NEW NEW NEW
+
+
+
             BuildPlan plan = getPlan(cursorX, cursorY);
 
             if(Core.input.keyDown(Binding.break_block)){
