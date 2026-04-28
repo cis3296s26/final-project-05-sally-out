@@ -476,3 +476,16 @@ task resolveDependencies{
         }
     }
 }
+task modJar(type: Jar) {
+    archiveBaseName.set("sallyout")
+
+    dependsOn(":core:classes")
+
+    from(project(":core").sourceSets.main.output) {
+        include "sallyout/**"
+    }
+
+    from(rootProject.file("mod.hjson"))
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

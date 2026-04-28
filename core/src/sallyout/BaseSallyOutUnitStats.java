@@ -1,4 +1,4 @@
-package mindustry.sallyout;
+package sallyout;
 
 public class BaseSallyOutUnitStats {
     //Stats

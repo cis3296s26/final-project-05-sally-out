@@ -1,7 +1,6 @@
-package mindustry.sallyout;
+package sallyout;
 
 import mindustry.content.UnitTypes;
-import mindustry.sallyout.ai.SallyOutRangedAI;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
@@ -24,6 +23,7 @@ import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import mindustry.world.meta.*;
+import sallyout.ai.SallyOutRangedAI;
 
 import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.*;
