@@ -45,6 +45,9 @@ import java.util.*;
 import static arc.Core.*;
 import static mindustry.Vars.*;
 
+import mindustry.type.UnitType; // NEW NEW NEW
+
+
 public abstract class InputHandler implements InputProcessor, GestureListener{
     /** Used for dropping items. */
     final static float playerSelectRange = mobile ? 17f : 11f;
@@ -64,6 +67,10 @@ public abstract class InputHandler implements InputProcessor, GestureListener{
     public Seq<Boolp> inputLocks = Seq.with(() -> renderer.isCutscene(), () -> logicCutscene);
     public Interval controlInterval = new Interval();
     public @Nullable Block block;
+
+    public @Nullable UnitType unitType;   //NEW NEW NEW
+    public boolean unitPlacementMode;
+    
     public boolean overrideLineRotation;
     public int rotation;
     public boolean droppingItem;

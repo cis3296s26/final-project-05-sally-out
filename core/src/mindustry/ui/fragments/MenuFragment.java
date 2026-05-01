@@ -242,9 +242,9 @@ private void startQuickGame() {
 
     final Map targetMap = foundMap;
 
-    Gamemode mode = Gamemode.survival.valid(targetMap) ? Gamemode.survival :
+    Gamemode mode = Gamemode.sandbox.valid(targetMap) ? Gamemode.sandbox :
         Structs.find(Gamemode.all, m -> m.valid(targetMap));
-    if (mode == null) mode = Gamemode.survival;
+    if (mode == null) mode = Gamemode.sandbox;
 
     Rules rules = targetMap.applyRules(mode);
     control.playMap(targetMap, rules);
