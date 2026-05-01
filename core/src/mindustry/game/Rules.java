@@ -171,6 +171,8 @@ public class Rules{
     public boolean coreIncinerates = false;
     /** If false, borders fade out into darkness. Only use with custom backgrounds!*/
     public boolean borderDarkness = true;
+    /** Whether this ruleset is the Sally Out gamemode. */
+    public boolean sallyout = false;
     /** If true, the map play area is cropped based on the rectangle below. */
     public boolean limitMapArea = false;
     /** Map area limit rectangle. */
@@ -201,7 +203,9 @@ public class Rules{
 
     /** Returns the gamemode that best fits these rules. */
     public Gamemode mode(){
-        if(pvp){
+        if(sallyout){
+            return Gamemode.sallyout;
+        }else if(pvp){
             return Gamemode.pvp;
         }else if(editor){
             return Gamemode.editor;

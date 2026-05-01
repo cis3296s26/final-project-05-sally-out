@@ -42,14 +42,8 @@ public class SallyOutMod extends Mod {
         // Register the world-draw overlay (deployment zones + unit stat bars)
         SetupPhaseOverlay.init();
 
-        Events.on(EventType.ClientLoadEvent.class, e -> {
-            SetupPhaseUI.openForAll(
-                    new arc.math.geom.Rect(0, 0, 300, 300),
-                    new arc.math.geom.Rect(400, 400, 300, 300),
-                    SallyOutGamemode.DEFAULT_SUPPLY_BUDGET);
-            System.out.println("SallyOut loaded");
-            System.out.println("SallyOut running inside dev build");
-        });
+        System.out.println("SallyOut loaded");
+        System.out.println("SallyOut running inside dev build");
 
         // // Update the setup UI timer every tick
         // Events.run(EventType.Trigger.update, () -> {

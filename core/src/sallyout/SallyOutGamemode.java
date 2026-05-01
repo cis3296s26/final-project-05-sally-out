@@ -76,6 +76,11 @@ public class SallyOutGamemode {
     // -------------------------------------------------------------------------
 
     private void onWorldLoad() {
+        if (Vars.state == null || !Vars.state.rules.sallyout) {
+            SetupPhaseUI.close();
+            return;
+        }
+
         entityMap.clear();
         inMeleeMap.clear();
         supplyUsed.clear();
@@ -110,6 +115,7 @@ public class SallyOutGamemode {
 
         if (setupPhase) {
             setupTimer -= Time.delta;
+            SetupPhaseUI.updateTimerLabel(Math.max(0f, setupTimer / 60f));
             if (setupTimer <= 0f) endSetupPhase();
             return;
         }

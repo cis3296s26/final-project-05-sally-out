@@ -50,6 +50,10 @@ public class SetupPhaseUI {
         if (instance != null) instance.closeUI();
     }
 
+    public static void updateTimerLabel(float secondsLeft) {
+        if (instance != null) instance.updateTimer(secondsLeft);
+    }
+
     // -------------------------------------------------------------------------
     // Unit catalogue
     // -------------------------------------------------------------------------
@@ -97,6 +101,7 @@ public class SetupPhaseUI {
 
     private void open(arc.math.geom.Rect zone1, arc.math.geom.Rect zone2, int budget) {
         this.budget = budget;
+        if (root != null) root.remove();
         buildRoot();
         Core.scene.add(root);
     }
@@ -143,6 +148,15 @@ public class SetupPhaseUI {
                     dragX = x;
                     dragY = y;
                     dragIcon.setPosition(x - 24f, y - 24f);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean keyDown(InputEvent event, KeyCode keycode) {
+                if (keycode == KeyCode.Z && (Core.input.keyDown(KeyCode.controlLeft) || Core.input.keyDown(KeyCode.controlRight))) {
+                    undoPlacement();
+                    return true;
                 }
                 return false;
             }
@@ -220,6 +234,11 @@ public class SetupPhaseUI {
     private void tryPlaceUnit(float screenX, float screenY) {
         if (dragType == null || Vars.player == null) return;
 
+        var hitActor = Core.scene.hit(screenX, screenY, true);
+        if (hitActor != null && hitActor.isDescendantOf(panel)) {
+            return;
+        }
+
         Vec2 world = Core.camera.unproject(new Vec2(screenX, screenY));
         float wx = world.x;
         float wy = world.y;
@@ -245,6 +264,32 @@ public class SetupPhaseUI {
         }
 
         updateBudgetLabel();
+    }
+
+    private void undoPlacement() {
+        if (placedUnits.isEmpty()) return;
+        Unit last = placedUnits.remove(placedUnits.size() - 1);
+        if (last != null && last.isAdded()) {
+            BaseSallyOutUnitStats ts = BaseSallyOutUnitType.BaseSallyOutUnitStats(last.type);
+            if (SallyOutGamemode.get() != null) {
+                SallyOutGamemode.get().refundSupply(last.team(), ts.cost);
+            }
+            last.kill();
+            flashMessage("Undid last placement.");
+            updateBudgetLabel();
+        }
+    }
+
+    private void flashMessage(String msg) {
+        Label toast = new Label(msg);
+        toast.setColor(Color.green);
+        toast.pack();
+        toast.setPosition(
+            Core.graphics.getWidth()  / 2f - toast.getWidth()  / 2f,
+            Core.graphics.getHeight() / 2f + 40f
+        );
+        Core.scene.add(toast);
+        Time.run(120f, toast::remove);
     }
 
     // -------------------------------------------------------------------------

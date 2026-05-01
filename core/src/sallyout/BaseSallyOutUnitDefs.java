@@ -48,7 +48,9 @@ public class BaseSallyOutUnitDefs {
     public static void load() {
         // --- Spearman ---
         spearman = new BaseSallyOutUnitType("spearman") {{
-            // Re-use mace sprite/constructor
+            // Re-use mace visuals and constructor
+            assetSource = UnitTypes.mace;
+            uiIcon      = UnitTypes.mace.uiIcon;
             constructor = UnitTypes.mace.constructor;
             health      = 200f;
             speed       = 1.3f;
@@ -68,6 +70,8 @@ public class BaseSallyOutUnitDefs {
 
         // --- Swordsman ---
         swordsman = new BaseSallyOutUnitType("swordsman") {{
+            assetSource = UnitTypes.dagger;
+            uiIcon      = UnitTypes.dagger.uiIcon;
             constructor = UnitTypes.dagger.constructor;
             health      = 350f;
             speed       = 1.1f;
@@ -87,6 +91,8 @@ public class BaseSallyOutUnitDefs {
 
         // --- Archer ---
         archer = new BaseSallyOutUnitType("archer") {{
+            assetSource = UnitTypes.dagger;
+            uiIcon      = UnitTypes.dagger.uiIcon;
             constructor = UnitTypes.dagger.constructor;
             health      = 150f;
             speed       = 1.4f;
@@ -110,6 +116,8 @@ public class BaseSallyOutUnitDefs {
 
         // --- Knight ---
         knight = new BaseSallyOutUnitType("knight") {{
+            assetSource = UnitTypes.fortress;
+            uiIcon      = UnitTypes.fortress.uiIcon;
             constructor = UnitTypes.fortress.constructor;
             health      = 500f;
             speed       = 0.9f;
@@ -129,6 +137,8 @@ public class BaseSallyOutUnitDefs {
 
         // --- Scout ---
         scout = new BaseSallyOutUnitType("scout") {{
+            assetSource = UnitTypes.dagger;
+            uiIcon      = UnitTypes.dagger.uiIcon;
             constructor = UnitTypes.dagger.constructor;
             health      = 80f;
             speed       = 2.2f;
@@ -149,6 +159,8 @@ public class BaseSallyOutUnitDefs {
 
         // --- Cataphract (heavy cavalry) ---
         cataphract = new BaseSallyOutUnitType("cataphract") {{
+            assetSource = UnitTypes.fortress;
+            uiIcon      = UnitTypes.fortress.uiIcon;
             constructor = UnitTypes.fortress.constructor;
             health      = 600f;
             speed       = 1.6f;
@@ -171,6 +183,8 @@ public class BaseSallyOutUnitDefs {
 
         // --- Gryphon (flying melee) ---
         gryphon = new BaseSallyOutUnitType("gryphon") {{
+            assetSource = UnitTypes.vela;
+            uiIcon      = UnitTypes.vela.uiIcon;
             constructor = UnitTypes.vela.constructor;
             health      = 280f;
             speed       = 1.8f;
@@ -192,6 +206,8 @@ public class BaseSallyOutUnitDefs {
 
         // --- General (command / morale unit) ---
         general = new BaseSallyOutUnitType("general") {{
+            assetSource = UnitTypes.scepter;
+            uiIcon      = UnitTypes.scepter.uiIcon;
             constructor = UnitTypes.scepter.constructor;
             health      = 300f;
             speed       = 1.0f;

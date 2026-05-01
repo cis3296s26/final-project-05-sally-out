@@ -39,6 +39,7 @@ public enum Gamemode {
         rules.waveTimer = false;
     }), //TODO Kevin added sallyout gamemode
     sallyout(rules -> {
+        rules.sallyout = true;
         rules.pvp = true;
         rules.enemyCoreBuildRadius = 600f;
         rules.buildCostMultiplier = 1f;
