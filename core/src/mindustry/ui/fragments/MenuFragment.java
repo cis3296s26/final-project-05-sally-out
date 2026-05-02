@@ -191,12 +191,12 @@ public class MenuFragment{
             t.name = "buttons";
 
             buttons(t,
-                new MenuButton("@play_NOT_ME", Icon.play,
-                    new MenuButton("@campaign", Icon.play, () -> checkPlay(ui.planet::show)),
-                    new MenuButton("@joingame", Icon.add, () -> checkPlay(ui.join::show)),
-                    new MenuButton("@customgame", Icon.terrain, () -> checkPlay(ui.custom::show)),
-                    new MenuButton("@loadgame", Icon.download, () -> checkPlay(ui.load::show))
-                ),
+                // new MenuButton("@play_NOT_ME", Icon.play,
+                //     new MenuButton("@campaign", Icon.play, () -> checkPlay(ui.planet::show)),
+                //     new MenuButton("@joingame", Icon.add, () -> checkPlay(ui.join::show)),
+                //     new MenuButton("@customgame", Icon.terrain, () -> checkPlay(ui.custom::show)),
+                //     new MenuButton("@loadgame", Icon.download, () -> checkPlay(ui.load::show))
+                // ),
                 new MenuButton("Quick Play", Icon.play, () -> checkPlay(this::startQuickGame)),
                 // new MenuButton("@database.button", Icon.menu,
                 //     new MenuButton("@schematics", Icon.paste, ui.schematics::show),
