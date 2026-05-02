@@ -46,3 +46,12 @@ If the terminal returns `Permission denied` or `Command not found` on Mac/Linux,
 
 Gradle may take up to several minutes to download files. Be patient. <br>
 After building, the output .JAR file should be in `/desktop/build/libs/Mindustry.jar` for desktop builds, and in `/server/build/libs/server-release.jar` for server builds.
+
+## How to Contribute
+
+Please follow this link to check the current standing of the project.
+https://trello.com/invite/b/69bd6cec0f568a14e95de861/ATTIc1ae3fe5b03c06468da242f8a86d28d2ECB2C689/final-project
+
+You'll want to the open this project on IntelliJ instead of VSCode due to how the generated files set up. 
+If VSCode is used then there will be about 10k errors that show up.
+The project will still run but it will be harder to debug.
