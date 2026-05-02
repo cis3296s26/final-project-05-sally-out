@@ -41,7 +41,7 @@ APP_HOME="`pwd -P`"
 cd "$SAVED" >/dev/null
 
 # USE INCLUDED JDK
-JAVA_HOME="$APP_HOME/MACjdk-17.0.12.jdk/Contents/Home"
+JAVA_HOME="jdk-17.0.2/"
 if [ ! -x "$JAVA_HOME/bin/java" ] ; then
     echo "ERROR: INCLUDED JDK NOT FOUND $JAVA_HOME"
     exit 1
