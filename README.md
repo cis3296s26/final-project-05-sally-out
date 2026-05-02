@@ -13,6 +13,14 @@ https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/G
 
 Desktop ARM support is untested(who uses arm?)
 
+In order to avoid enviroment variable issues, the jdk path is used to build is hardcoded. After downloading  jdk 17, extract and place it inside the cloned repository folder like so:
+final-project-05-sally-out
+├──.git
+├──gradle
+├──...
+├──**jdk-17.0.2**
+└──...
+
 ### Windows
 _Running:_ `./gradlew desktop:run`  
 _Building:_ `./gradlew desktop:dist`  
