@@ -1,3 +1,9 @@
+## Sally Out!
+
+Sally Out! is a wargame simulator that aims to provide a convenient RTS experience to those familiar with and new to the genre.
+Sally Out! takes inspiration from similar projects such as Istrolid, Lines of Battle, and SOVL: Fantasy Warfare while it is  aimed more towards a fantastical aesthetic.
+
+
 ## Building
 
 Although new versions of the jdk wil likely work, the version tested during development is jdk-17.0.2
